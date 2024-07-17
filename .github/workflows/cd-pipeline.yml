@@ -1,0 +1,45 @@
+name: CD Pipeline
+run-name: ${{ github.actor }} is currently deploying 🚀
+
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+env:
+  IMAGE_NAME: jinyhehe/front-spacestory
+  IMAGE_TAG: "1.0"
+  DOCKER_REGISTRY_USER: ${{ secrets.DOCKER_REGISTRY_USER }}
+  DOCKER_REGISTRY_PASS: ${{ secrets.DOCKER_REGISTRY_PASS }}
+
+jobs:
+  Build:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build image
+        run: |
+          echo "${{ secrets.ENV }}" > .env.production
+          echo $DOCKER_REGISTRY_PASS | docker login --username $DOCKER_REGISTRY_USER --password-stdin
+          docker build -t $IMAGE_NAME:$IMAGE_TAG .
+          docker push $IMAGE_NAME:$IMAGE_TAG
+
+  Deploy:
+    needs: Build
+    runs-on: ubuntu-24.04
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup ssh
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H 13.125.15.214 >> ~/.ssh/known_hosts
+
+      - name: Deploy image
+        run: ssh -i ~/.ssh/id_rsa ubuntu@13.125.15.214 "echo $DOCKER_REGISTRY_PASS | docker login --username $DOCKER_REGISTRY_USER --password-stdin && docker rm nextjs-app -f || true && docker pull $IMAGE_NAME:$IMAGE_TAG && docker run -d -p 5173:5173 --name nextjs-app --network juny $IMAGE_NAME:$IMAGE_TAG"

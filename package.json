@@ -10,7 +10,7 @@
   "scripts": {
     "dev": "next dev -p 5173",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -p 5173",
     "lint": "next lint",
     "prepare": "husky install"
   },
