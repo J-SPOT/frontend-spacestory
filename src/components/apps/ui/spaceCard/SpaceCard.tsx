@@ -1,47 +1,65 @@
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import { styled } from 'twin.macro';
 
-import NoImage from '../NoImage';
+import { SpaceType } from '@/apis/spaces/types';
 
-// TODO : 백엔드와 논의하여 프로퍼티 명세 후 수정 필요
-export type SpaceCardProps = {
-  imgSrc?: string;
-  title?: string; // 공간명
-  dong?: string; // 위치 (ex. 망원동)
-  hashtag?: string[]; // 해시태그
-  fee?: number; // 가격
-  capacity?: number; // 수용인원
-  reviewCount?: number; // 리뷰 수
-  likeCount?: number; // 좋아요 수
+// import NoImage from '../NoImage';
+
+type Props = {
+  spaceData: SpaceType;
 };
 
-export default function SpaceCard({
-  imgSrc,
-  title = '공간명',
-  dong = '동명',
-  hashtag = ['#해시태그1', '#해시태그2', '#해시태그3'],
-  fee = 99999,
-  capacity = 20,
-  reviewCount = 10,
-  likeCount = 30,
-}: SpaceCardProps) {
+export default function SpaceCard({ spaceData }: Props) {
+  const {
+    id,
+    name,
+    dong,
+    hashtags,
+    hourlyRate,
+    maxCapacity,
+    reviewCount,
+    likeCount,
+  } = spaceData;
+
+  const router = useRouter();
+
+  const handleRoute = () => {
+    router.push(`/space/${id}`);
+  };
+
   return (
-    <SpaceCardContainer>
+    <SpaceCardContainer onClick={handleRoute}>
       <ImageWrapper>
-        {imgSrc ? (
-          <Image src={imgSrc} alt="space" fill style={{ objectFit: 'cover' }} />
+        {/* TODO : 리스트에 이미지 패스 필요 */}
+        {/* {imagePaths ? (
+          <Image
+            // src={imagePaths[0]}
+            src="/images/dummy_space_image.png"
+            alt="space"
+            fill
+            style={{ objectFit: 'cover', borderRadius: '12px 12px 0 0' }}
+            sizes="380px"
+          />
         ) : (
           <NoImage />
-        )}
+        )} */}
+        <Image
+          src="/images/dummy_space_image.png"
+          alt="space"
+          fill
+          style={{ objectFit: 'cover', borderRadius: '12px 12px 0 0' }}
+          sizes="380px"
+        />
       </ImageWrapper>
       <ContentsContainer>
-        <Title>{title}</Title>
+        <Title>{name}</Title>
 
         <InfoWrapper>
           <Dong>{dong}</Dong>
           <HastagWrapper>
-            {hashtag.map((tag, index) => {
-              return <HashTag key={index}>{tag}</HashTag>;
+            {hashtags.map((tag, index) => {
+              return <HashTag key={index}># {tag.name}</HashTag>;
             })}
           </HastagWrapper>
         </InfoWrapper>
@@ -49,10 +67,10 @@ export default function SpaceCard({
         <InfoWrapper>
           {/* TODO : 원/시간 단위 확인 필요 */}
           <Fee>
-            <strong>{fee.toLocaleString()}</strong> 원/시간
+            <strong>{hourlyRate.toLocaleString()}</strong> 원/시간
           </Fee>
           <CapacityReviewLikeWrapper>
-            <Capacity>{`최대 ${capacity}인`}</Capacity>
+            <Capacity>{`최대 ${maxCapacity}인`}</Capacity>
             <ReviewCount>{reviewCount}</ReviewCount>
             <LikeCount>{likeCount}</LikeCount>
           </CapacityReviewLikeWrapper>
@@ -63,12 +81,10 @@ export default function SpaceCard({
 }
 
 const SpaceCardContainer = styled.div`
-  flex: 1;
-  overflow: hidden;
   box-shadow: 1px 2px 6px 0 rgba(0, 0, 0, 0.16078);
   border-radius: 12px;
   cursor: pointer;
-  height: 276px;
+  min-width: 0;
 `;
 
 const ImageWrapper = styled.div`
@@ -79,22 +95,28 @@ const ImageWrapper = styled.div`
 const ContentsContainer = styled.div`
   display: flex;
   flex-direction: column;
-  flex-grow: 1;
   gap: 5px;
   height: calc(100% - 180px);
   padding: 12px 16px;
+  min-width: 0;
 `;
 
 const Title = styled.h3`
   font-size: 16px;
   font-weight: 600;
   color: #000;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 `;
 
 const InfoWrapper = styled.div`
+  position: relative;
   display: flex;
   justify-content: space-between;
-  position: relative;
+  align-items: center;
+  gap: 20px;
+  white-space: nowrap;
   font-family: Pretendard;
   font-size: 12px;
   font-weight: 400;
@@ -111,7 +133,8 @@ const InfoWrapper = styled.div`
   }
 `;
 
-const Dong = styled.span`
+const Dong = styled.div`
+  display: flex;
   position: relative;
   padding-left: 15px;
   &::before {
@@ -126,9 +149,18 @@ const Dong = styled.span`
   }
 `;
 
-const HastagWrapper = styled.div`
-  display: flex;
-  gap: 5px;
+const HastagWrapper = styled.span`
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+  span {
+    margin-right: 5px;
+    &:last-child {
+      margin-right: 0;
+    }
+  }
 `;
 
 const HashTag = styled.span`
@@ -139,7 +171,13 @@ const Fee = styled.span`
   position: relative;
 `;
 
-const CapacityReviewLikeWrapper = styled.div``;
+const CapacityReviewLikeWrapper = styled.div`
+  width: fit-content;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+`;
 
 const Capacity = styled.span`
   position: relative;

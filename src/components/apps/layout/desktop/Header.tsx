@@ -1,8 +1,8 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
-import { styled, theme } from 'twin.macro';
+import { css, styled, theme } from 'twin.macro';
 
 import Search from '../../ui/Search';
 import ContentWrapper from '../ContentWrapper';
@@ -10,12 +10,22 @@ import ContentWrapper from '../ContentWrapper';
 export default function Header() {
   const [isSubHeaderOpen, setIsSubHeaderOpen] = useState(false);
   const [cookies] = useCookies(['accessToken']);
+  const [isScrolled, setIsScrolled] = useState(false);
 
   const isLoggedIn = Boolean(cookies.accessToken);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 0);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
     <>
-      <HeaderContainer>
+      <HeaderContainer isScrolled={isScrolled}>
         <ContentWrapper tw="relative">
           {isLoggedIn ? (
             <LogoWrapper href="/">
@@ -69,7 +79,7 @@ export default function Header() {
   );
 }
 
-const HeaderContainer = styled.header`
+const HeaderContainer = styled.header<{ isScrolled: boolean }>`
   position: fixed;
   top: 0;
   left: 0;
@@ -78,11 +88,19 @@ const HeaderContainer = styled.header`
   padding: 24px 0;
   z-index: 10000;
   background-color: white;
+  transition: 0.3s;
+
   & > div {
     display: flex;
     justify-content: space-between;
     align-items: center;
   }
+
+  ${({ isScrolled }) =>
+    isScrolled &&
+    css`
+      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    `}
 `;
 
 // const LeftMenu = styled.div`

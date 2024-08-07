@@ -15,5 +15,3 @@ export default function HomePage() {
     </>
   );
 }
-
-HomePage.authenticationRequired = false;

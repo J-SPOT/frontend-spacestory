@@ -14,7 +14,6 @@ const customStyles = css`
     min-width: ${theme`variables.apps.min-width`};
     background-color: white;
     -webkit-tap-highlight-color: transparent;
-    overflow: auto;
     font-family: 'NanumGothic', 'Pretendard', Helvetica, 'Apple SD Gothic Neo',
       Sans-serif !important;
     ${tw`antialiased`}

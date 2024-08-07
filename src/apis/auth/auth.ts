@@ -122,7 +122,7 @@ export const postAuthRefreshToken = async (
  */
 export const postAuthTotpQR = async (
   params: AuthTotpQRParamsType,
-): Promise<CommonResultType> => {
+): Promise<string> => {
   const res = await authAxios.post(`${API_ENDPOINTS.AUTH_TOTP}/qr`, params);
 
   return res.data;

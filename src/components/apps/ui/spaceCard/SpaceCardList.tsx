@@ -1,27 +1,33 @@
 import { useMediaQuery } from 'react-responsive';
+import { Autoplay } from 'swiper/modules';
 import { theme } from 'twin.macro';
 
-import { CustomSwiper } from '../../swiper/CustomSwiper';
-import SpaceCard, { SpaceCardProps } from './SpaceCard';
+import { SpaceType } from '@/apis/spaces/types';
 
-type SpaceCardListProps = {
-  data: SpaceCardProps[];
+import { CustomSwiper } from '../../swiper/CustomSwiper';
+import SpaceCard from './SpaceCard';
+
+type Props = {
+  data: SpaceType[];
 };
 
-export default function SpaceCardList({ data }: SpaceCardListProps) {
+export default function SpaceCardList({ data }: Props) {
   const isDesktop = useMediaQuery({
     query: `(min-width: ${theme`screens.lg`})`,
   });
 
   return (
     <CustomSwiper
-      items={data.map((card, index) => (
-        <SpaceCard key={index} {...card} />
-      ))}
+      modules={[Autoplay]}
+      items={data.map((spaceData, index) => {
+        return <SpaceCard key={index} spaceData={spaceData} />;
+      })}
       slidesPerView={isDesktop ? 3.02 : 1.3}
       spaceBetween={15}
       centeredSlides
       hasContentBoxShadow
+      autoplay
+      speed={800}
     />
   );
 }

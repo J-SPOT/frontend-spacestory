@@ -18,3 +18,5 @@ export default function MypagePage() {
     </>
   );
 }
+
+MypagePage.authenticationRequired = true;

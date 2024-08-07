@@ -1,23 +1,7 @@
 import Link from 'next/link';
-import { Fragment } from 'react';
 import { styled, theme } from 'twin.macro';
 
 import ContentWrapper from '../ContentWrapper';
-
-const NAV_ITEMS = [
-  {
-    title: '배너광고 문의',
-    href: 'https://plucky-sleep-a52.notion.site/41ae473161e44ae88e46df399902f8fd',
-  },
-  { title: '이용약관', href: 'https://www.spacecloud.kr/agreement' },
-  { title: '개인정보처리방침', href: 'https://www.spacecloud.kr/policyPerson' },
-  { title: '운영정책', href: 'https://www.spacecloud.kr/policyOperate' },
-  {
-    title: '콘텐츠산업진흥법에 의한 표시',
-    href: 'https://www.spacecloud.kr/contentsinfo',
-  },
-  { title: '고객 문의', href: '/' },
-];
 
 export default function Footer() {
   return (
@@ -25,17 +9,33 @@ export default function Footer() {
       <ContentWrapper>
         <ContentsTop>
           <LogoImg />
-          <NavWrapper>
-            {NAV_ITEMS.map((item, index) => {
-              return (
-                <Fragment key={index}>
-                  <NavItem href={item.href} target="_blank">
-                    {item.title}
-                  </NavItem>
-                  {index !== NAV_ITEMS.length - 1 && <NavBar>|</NavBar>}
-                </Fragment>
-              );
-            })}
+          <NavWrapper tw="text-[#632ED8] font-[Pretendard]">
+            <span tw="mr-4">
+              본 사이트는 스터디를 목적으로 한 클론 사이트이며, 실제 서비스가
+              아님을 고지합니다.
+            </span>
+            <span tw="text-right">
+              <span tw="mr-2">
+                BE 작업자 :{' '}
+                <LinkText
+                  href="https://github.com/ji-jjang"
+                  target="_blank"
+                  tw="text-[#632ED8] font-bold"
+                >
+                  지준혁
+                </LinkText>
+              </span>
+              <span>
+                FE 작업자 :{' '}
+                <LinkText
+                  href="https://github.com/jinbokk"
+                  target="_blank"
+                  tw="text-[#632ED8] font-bold"
+                >
+                  이진복
+                </LinkText>
+              </span>
+            </span>
           </NavWrapper>
         </ContentsTop>
 
@@ -109,7 +109,7 @@ export default function Footer() {
             따라서 스페이스클라우드는 공간 거래정보 및 거래에 대해 책임지지
             않습니다.
           </Text>
-          <Text tw="text-[12px] text-[#949494] whitespace-pre-wrap">
+          <Text tw="text-[#949494] whitespace-pre-wrap">
             Copyright{' '}
             <LinkText href="http://www.nspace.co/" target="_blank">
               NSPACE Corp.
@@ -149,14 +149,6 @@ const LogoImg = styled.div`
   background-size: 684px 663px;
   background-image: url('/images/imgSet.png');
   background-position: -320px -250px;
-`;
-
-const NavItem = styled(Link)``;
-
-const NavBar = styled.span`
-  font-size: 10px;
-  margin: 0 10px;
-  opacity: 0.5;
 `;
 
 const NavWrapper = styled.div``;
@@ -227,4 +219,5 @@ const ContentsBottom = styled.div`
   gap: 30px;
   justify-content: space-between;
   margin-top: 45px;
+  font-size: 11px;
 `;

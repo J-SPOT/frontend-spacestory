@@ -6,7 +6,20 @@ import withTwin from './withTwin.mjs';
 const nextConfig = withTwin({
   reactStrictMode: true,
   images: {
-    domains: ['kr.object.ncloudstorage.com'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'my-spacestory-bucket.s3.ap-northeast-2.amazonaws.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'kr.object.ncloudstorage.com',
+        port: '',
+        pathname: '/**',
+      },
+    ],
   },
 });
 

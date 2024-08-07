@@ -16,8 +16,6 @@ export default function LoginPage() {
   );
 }
 
-LoginPage.authenticationRequired = false;
-
 export async function getServerSideProps(context: any) {
   const { req, res } = context;
   const cookies = req.headers.cookie;

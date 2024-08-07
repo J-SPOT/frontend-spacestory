@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
@@ -32,7 +33,8 @@ export default function Mypage() {
   const [cookies, , removeCookie] = useCookies();
   const { clear } = useAuthStore();
 
-  const [willPwChange, setWillPwChange] = useState(false);
+  const [willPwChange, setWillPwChange] = useState<boolean>(false);
+  const [totpImage, setTotpImage] = useState<string | undefined>(undefined);
 
   const methods = useForm();
 
@@ -73,7 +75,7 @@ export default function Mypage() {
         { email: data?.email as string },
         {
           onSuccess: (data) => {
-            console.log(data);
+            setTotpImage(data);
           },
         },
       );
@@ -226,6 +228,20 @@ export default function Mypage() {
                     )}
                   </Content>
                 </Row>
+                {totpImage && (
+                  <Row tw="flex flex-col items-center justify-center gap-0">
+                    <div tw="max-w-[250px]">
+                      사용하시는 2차 인증 어플리케이션으로 아래 QR코드를
+                      스캔해주세요
+                    </div>
+                    <Image
+                      src={totpImage}
+                      alt="totp"
+                      width={200}
+                      height={200}
+                    />
+                  </Row>
+                )}
               </Top>
               <Bottom>
                 <Button onClick={handleLogout} tw="font-bold">
@@ -269,7 +285,6 @@ const Wrapper = styled.div`
 
 const Top = styled.div`
   border-bottom: 1px solid #f6f6f6;
-  padding-bottom: 20px;
 `;
 
 const Bottom = styled.div`

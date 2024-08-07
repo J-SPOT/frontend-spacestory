@@ -1,18 +1,8 @@
 import Link from 'next/link';
-import { Fragment, useState } from 'react';
+import { useState } from 'react';
 import { styled, theme } from 'twin.macro';
 
 import ContentWrapper from '../ContentWrapper';
-
-const NAV_ITEMS = [
-  {
-    title: '배너광고 문의',
-    href: 'https://plucky-sleep-a52.notion.site/41ae473161e44ae88e46df399902f8fd',
-  },
-  { title: '이용약관', href: 'https://www.spacecloud.kr/agreement' },
-  { title: '개인정보처리방침', href: 'https://www.spacecloud.kr/policyPerson' },
-  { title: '운영정책', href: 'https://www.spacecloud.kr/policyOperate' },
-];
 
 export default function Footer() {
   const [toggleOpen, setToggleOpen] = useState(false);
@@ -93,17 +83,31 @@ export default function Footer() {
         </IconWrapper>
 
         <ContentsBottom>
-          <NavWrapper>
-            {NAV_ITEMS.map((item, index) => {
-              return (
-                <Fragment key={index}>
-                  <NavItem href={item.href} target="_blank">
-                    {item.title}
-                  </NavItem>
-                  {index !== NAV_ITEMS.length - 1 && <NavBar>|</NavBar>}
-                </Fragment>
-              );
-            })}
+          <NavWrapper tw="text-[#632ED8] text-center font-[Pretendard]">
+            <div>본 사이트는 스터디를 목적으로 한 클론 사이트이며</div>
+            <div>실제 서비스가 아님을 고지합니다.</div>
+            <span tw="text-right">
+              <span tw="mr-2">
+                BE 작업자 :{' '}
+                <LinkText
+                  href="https://github.com/ji-jjang"
+                  target="_blank"
+                  tw="text-[#632ED8] font-bold"
+                >
+                  지준혁
+                </LinkText>
+              </span>
+              <span>
+                FE 작업자 :{' '}
+                <LinkText
+                  href="https://github.com/jinbokk"
+                  target="_blank"
+                  tw="text-[#632ED8] font-bold"
+                >
+                  이진복
+                </LinkText>
+              </span>
+            </span>
           </NavWrapper>
           <LinkText
             href="http://www.nspace.co/"
@@ -144,14 +148,6 @@ const LogoImg = styled.div`
   background-size: 463px 458px;
   background-image: url('/images/imgSet_mobile.png');
   background-position: 0 -273px;
-`;
-
-const NavItem = styled(Link)``;
-
-const NavBar = styled.span`
-  font-size: 10px;
-  margin: 0 10px;
-  opacity: 0.5;
 `;
 
 const NavWrapper = styled.div``;

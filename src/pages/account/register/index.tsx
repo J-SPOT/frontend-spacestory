@@ -15,5 +15,3 @@ export default function RegisterPage() {
     </>
   );
 }
-
-RegisterPage.authenticationRequired = false;

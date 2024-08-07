@@ -1,13 +1,21 @@
 import { useMediaQuery } from 'react-responsive';
 import { styled, theme } from 'twin.macro';
 
-import { BANNER_IMAGE_SET, DUMMY_SPACE_DATA } from '@/data/constant';
+import { useSpacesQuery } from '@/apis/spaces/spaces.query';
+
+import { BANNER_IMAGE_SET } from '@/data/constant';
 
 import ContentWrapper from '../../layout/ContentWrapper';
 import Banner from '../../ui/Banner';
+import Spinner from '../../ui/Spinner';
+import CategoryList from '../../ui/category/CategoryList';
 import SpaceCardList from '../../ui/spaceCard/SpaceCardList';
 
 export default function Home() {
+  const { data, isLoading } = useSpacesQuery({
+    params: { page: 1, size: 10 },
+  });
+
   const isDesktop = useMediaQuery({
     query: `(min-width: ${theme`screens.lg`})`,
   });
@@ -21,12 +29,20 @@ export default function Home() {
       </Section>
 
       <Section>
-        {isDesktop ? (
+        <ContentWrapper>
+          <CategoryList />
+        </ContentWrapper>
+      </Section>
+
+      <Section>
+        {isLoading ? (
+          <Spinner />
+        ) : isDesktop ? (
           <ContentWrapper>
-            <SpaceCardList data={DUMMY_SPACE_DATA} />
+            <SpaceCardList data={data.content} />
           </ContentWrapper>
         ) : (
-          <SpaceCardList data={DUMMY_SPACE_DATA} />
+          <SpaceCardList data={data.content} />
         )}
       </Section>
     </HomeConatiner>
